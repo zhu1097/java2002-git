@@ -1,0 +1,393 @@
+<div class="container" style="padding-top: 20px;padding-bottom: 20px;">
+   <h2> 视频管理</h2>
+</div>
+
+
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="addVideo">添加</button>
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">批量删除</button>
+    </div>
+</script>
+
+
+<table class="layui-hide" id="test" lay-filter="test"></table>
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+
+<script>
+    layui.use('table', function(){
+        var table = layui.table;
+        table.render({
+            elem: '#test'
+            ,toolbar: '#toolbarDemo'
+            ,url:'video/list'
+            ,title: '用户数据表'
+            ,cols: [[
+                {type: 'checkbox', fixed: 'left'}
+                 ,{field:'vid', title:'序号', sort: true}
+                ,{field:'title', title:'名称'}
+                ,{field:'detail', title:'介绍'}
+                ,{field:'speaker_name', title:'讲师'}
+                ,{field:'time', title:'时长'}
+                ,{field:'play_num', title:'播放次数'}
+                //,{field:'create_time', title:'时间',templet:"<div>{{layui.util.toDateString(d.create_time, 'yyyy-MM-dd HH:mm:ss')}}</div> "}
+                ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+            ]]
+            ,page: true
+        });
+        //头工具栏事件
+        table.on('toolbar(test)', function(obj){
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch(obj.event){
+                case 'getCheckData':
+                    var data = checkStatus.data;
+                    //layer.alert(JSON.stringify(data));
+                    //声明参数传多个id
+                    var params = "";
+                    //js遍历
+                    for(var i in data){
+                        params+="&ids="+data[i].vid
+                    }
+                    alert(params);
+                    $.ajax({
+                        url: "video/deleteByIds",
+                        type: "POST",
+                        data: params,
+                        success: function(){
+                            // table.reload("test",{});
+                            window.location.reload();
+                        }
+                    });
+
+                    break;
+                case 'getCheckLength':
+                    var data = checkStatus.data;
+                    layer.msg('选中了：'+ data.length + ' 个');
+                    break;
+                case 'isAll':
+                    layer.msg(checkStatus.isAll ? '全选': '未全选');
+                    break;
+                case 'addVideo':
+
+                    addVideo(data);
+
+                    break;
+
+                //自定义头工具栏右侧图标 - 提示
+                case 'LAYTABLE_TIPS':
+                    layer.alert('这是工具栏右侧自定义的一个图标按钮');
+                    break;
+            };
+        });
+        //头工具栏事件
+        table.on('tool(test)', function(obj){
+            var data = obj.data;
+            //console.log(obj)
+            if(obj.event === 'del'){
+                //alert(JSON.stringify(data));
+                layer.confirm('真的删除行么', function(index){
+                    obj.del();
+                    //从数据库中删除
+                    $.ajax({
+                        url: "video/deleteById",
+                        data:"vid="+data.vid,
+                        success: function(){
+                            layer.close(index);
+                        }
+                    });
+
+                });
+            } else if(obj.event === 'edit'){
+
+              showVideo(data);
+              console.log(data)
+            }
+        });
+    });
+</script>
+<script>
+
+    var speaks = null;
+    var courses = null;
+
+
+    <!-- 页面加载时触发 -->
+    $(function () {
+
+        $.ajax({
+            type: "POST",
+            url: "speaker/selectSpeakerName",
+            success: function(backData){
+                JSON.stringify(backData);
+                speaks  = backData;
+            }
+        });
+        $.ajax({
+            type: "POST",
+            url: "course/selectCourseName",
+            success: function(backData){
+                JSON.stringify(backData);
+                courses=backData;
+                //alert(courses);
+            }
+        });
+
+
+    })
+
+
+    function showVideo(data) {
+        // console.log(data)
+        layer.open({
+            type: 1,
+            content: $('#updateVideo').html(),
+            title: '修改视频',
+            area: ['1100px', '500px'],
+            btn: ['提交', '取消'], //可以写多个按钮
+            success: function () {//弹出层打开后的回调函数,数据回显
+
+                // console.log(data.vid)
+
+                $('#id').val(data.vid)
+                $('#title').val(data.title);
+                $('#speaker_name').val(data.speaker_name);
+                $('#time').val(data.time);
+                $('#image_url').val(data.image_url);
+                $('#video_url').val(data.video_url);
+                $('#detail').val(data.detail);
+                for (var i = 0; i < speaks.length; i++) {
+                    console.log(data.id);
+                    if (speaks[i].id === data.sid) {
+
+                        $("#speaker_name").append('<option selected value="' + speaks[i].id + '">' + speaks[i].speaker_name + '</option>');
+                    }else{
+                        $("#speaker_name").append('<option value="' + speaks[i].id + '">' + speaks[i].speaker_name + '</option>');
+                    }
+                }
+                for (var i = 0; i < courses.length; i++) {
+                    if (courses[i].id === data.course_id) {
+                        $("#course_id").append('<option selected value="' + courses[i].id + '">' + courses[i].course_title + '</option>');
+                    }else{
+                        $("#course_id").append('<option value="' + courses[i].id + '">' + courses[i].course_title + '</option>');
+                    }
+                }
+                layui.form.render();//后追加到页面的元素，layui不渲染，必须render
+            },
+            yes: function (index, layero) {
+                $.ajax({
+                    url: 'video/updateVideo',
+                    data: $("#video-edit-form").serialize(),
+                    method: 'post',
+                    success: function () {
+                        window.location.reload();//重新加载
+                        //$("#main").load(url)
+                    }
+                })
+            }
+        })
+    }
+
+</script>
+<!--添加的方法-->
+<script>
+
+    var speaks = null;
+    var courses = null;
+
+
+    <!-- 页面加载时触发 -->
+    $(function () {
+
+        $.ajax({
+            type: "POST",
+            url: "speaker/selectSpeakerName",
+            success: function(backData){
+                JSON.stringify(backData);
+                speaks  = backData;
+            }
+        });
+        $.ajax({
+            type: "POST",
+            url: "course/selectCourseName",
+            success: function(backData){
+                JSON.stringify(backData);
+                courses=backData;
+                //alert(courses);
+            }
+        });
+
+
+    })
+
+
+    function addVideo(data) {
+        // console.log(data)
+        layer.open({
+            type: 1,
+            content: $('#addVideo').html(),
+            title: '添加',
+            area: ['1100px', '500px'],
+            btn: ['提交', '取消'], //可以写多个按钮
+            success: function () {//弹出层打开后的回调函数,数据回显
+
+                for (var i = 0; i < speaks.length; i++) {
+                    $("#addSpeakerName").append('<option value="' + speaks[i].id + '">' + speaks[i].speaker_name + '</option>');
+                }
+                for (var i = 0; i < courses.length; i++) {
+                    $("#addCourseId").append('<option value="' + courses[i].id + '">' + courses[i].course_title + '</option>');
+
+                }
+                layui.form.render();//后追加到页面的元素，layui不渲染，必须render
+            },
+            yes: function (index, layero) {
+                $.ajax({
+                    url: 'video/insertVideo',
+                    data: $("#video-add-form").serialize(),
+                    method: 'post',
+                    success: function () {
+                        window.location.reload();//重新加载
+                        //$("#main").load(url)
+                    }
+                })
+            }
+        })
+    }
+
+</script>
+
+<!--添加的表单-->
+<script type="text/html" id="addVideo">
+
+    <form id="video-add-form" style="width: 80%" class="layui-form" lay-filter="music-edit-form">
+        <input type="hidden" name="id" id="addId">
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">名称</label>
+            <div class="layui-input-block">
+                <input id="addTitle" type="text" name="title" required lay-verify="required"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">教师名字</label>
+
+            <div class="layui-input-inline">
+                <select name="speakerId" id="addSpeakerName">
+
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">所属课程</label>
+            <div class="layui-input-inline">
+                <select name="courseId" id="addCourseId">
+
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">时长</label>
+            <div class="layui-input-block">
+                <input id="addTime" type="text" name="addTime" required lay-verify="required"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">封面图片地址</label>
+            <div class="layui-input-block">
+                <input id="addImageUrl" type="text" name="imageUrl" required lay-verify="required"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">视频播放地址</label>
+                <div class="layui-input-block">
+                    <input id="addvideoUrl" type="text" name="videoUrl" required lay-verify="required"
+                           autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">备注</label>
+                <div class="layui-input-block">
+                    <input id="addDetail" type="text" name="detail" required lay-verify="required"
+                           autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+
+    </form>
+</script>
+
+<script type="text/html" id="updateVideo">
+    <form id="video-edit-form" style="width: 80%" class="layui-form" lay-filter="music-edit-form">
+        <input type="hidden" name="id" id="id">
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">名称</label>
+            <div class="layui-input-block">
+                <input id="title" type="text" name="title" required lay-verify="required"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">教师名字</label>
+            <div class="layui-input-inline">
+                <select name="speakerId" id="speaker_name">
+
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">所属课程</label>
+            <div class="layui-input-inline">
+                <select name="courseId" id="course_id">
+
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">时长</label>
+            <div class="layui-input-block">
+                <input id="time" type="text" name="time" required lay-verify="required"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">封面图片地址</label>
+            <div class="layui-input-block">
+                <input id="image_url" type="text" name="imageUrl" required lay-verify="required"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">视频播放地址</label>
+            <div class="layui-input-block">
+                <input id="video_url" type="text" name="videoUrl" required lay-verify="required"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block">
+                <input id="detail" type="text" name="detail" required lay-verify="required"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        </div>
+    </form>
+</script>

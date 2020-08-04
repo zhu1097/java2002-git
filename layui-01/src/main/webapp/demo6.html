@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <script src="layui/layui.js"></script>
+</head>
+<body>
+<table id="demo" lay-filter="test"></table>
+</body>
+<script>
+    // 必须要导入 table模块 layui.use('table',...)
+    layui.use('table', function(){
+        var table = layui.table;
+        // 为表格填充数据
+        table.render({
+            elem: '#demo'
+            ,height: 312
+            ,url: 'demo.json' //获取数据
+            ,page: true //开启分页
+            ,cols: [[ //表头
+                {field:'id', width:80, title: 'ID', sort: true}
+                ,{field:'username', width:80, title: '用户名'}
+                ,{field:'sex', width:80, title: '性别', sort: true}
+                ,{field:'city',  title: '城市'} //没定义宽度则占满剩余所有宽度，都不定义则所有列均分
+                ,{field:'score',width:80, title: '评分', sort: true}
+            ]]
+        });
+
+    });
+</script>
+</html>

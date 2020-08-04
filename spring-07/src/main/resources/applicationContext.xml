@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx" xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd"> <!-- bean definitions here -->
+
+        <bean name="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+                <property name="username" value="root"></property>
+                <property name="password" value="123456"></property>
+                <property name="url" value="jdbc:mysql:///java2002?serverTimezone=Asia/Shanghai"></property>
+                <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"></property>
+        </bean>
+
+        <bean name="accountDao" class="com.qf.dao.impl.AccountDaoImpl">
+                <property name="dataSource" ref="dataSource"></property>
+        </bean>
+
+        <bean name="accountService" class="com.qf.service.impl.AccountServiceImpl">
+                <property name="accountDao" ref="accountDao"></property>
+                <!--                <property name="transactionTemplate" ref="transactionTemplate"></property>-->
+        </bean>
+        <!-- 事务平台管理器 -->
+        <bean name="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+                <property name="dataSource" ref="dataSource"></property>
+        </bean>
+
+
+        <!-- 事务模板对象 -->
+        <!--        <bean name="transactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">-->
+        <!--                <property name="transactionManager" ref="transactionManager"></property>-->
+        <!--        </bean>-->
+
+        <!-- 声明式事务 -->
+        <tx:advice id="txAdvice" transaction-manager="transactionManager" >
+                <tx:attributes>
+                        <tx:method name="find*" propagation="REQUIRED" isolation="DEFAULT" read-only="true"></tx:method>
+                        <tx:method name="transfer" propagation="REQUIRED" isolation="DEFAULT" read-only="false"/>
+                </tx:attributes>
+        </tx:advice>
+
+        <aop:config>
+                <aop:pointcut id="pc" expression="execution(* com.qf.service.impl.*ServiceImpl.*(..))"/>
+                <aop:advisor advice-ref="txAdvice" pointcut-ref="pc"></aop:advisor>
+        </aop:config>
+
+
+
+
+</beans>

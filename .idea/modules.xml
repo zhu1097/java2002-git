@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/file/file.iml" filepath="$PROJECT_DIR$/file/file.iml" />
+      <module fileurl="file://$PROJECT_DIR$/git/git.iml" filepath="$PROJECT_DIR$/git/git.iml" />
+      <module fileurl="file://$PROJECT_DIR$/layui-01/layui-01.iml" filepath="$PROJECT_DIR$/layui-01/layui-01.iml" />
+      <module fileurl="file://$PROJECT_DIR$/layui-02/layui-02.iml" filepath="$PROJECT_DIR$/layui-02/layui-02.iml" />
+      <module fileurl="file://$PROJECT_DIR$/my-quartz-02/my-quartz-02.iml" filepath="$PROJECT_DIR$/my-quartz-02/my-quartz-02.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mybatis-02/mybatis-02.iml" filepath="$PROJECT_DIR$/mybatis-02/mybatis-02.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mybatis_01/mybatis_01.iml" filepath="$PROJECT_DIR$/mybatis_01/mybatis_01.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mylog-01/mylog-01.iml" filepath="$PROJECT_DIR$/mylog-01/mylog-01.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mylog-02/mylog-02.iml" filepath="$PROJECT_DIR$/mylog-02/mylog-02.iml" />
+      <module fileurl="file://$PROJECT_DIR$/myquartz/myquartz.iml" filepath="$PROJECT_DIR$/myquartz/myquartz.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-01/spring-01.iml" filepath="$PROJECT_DIR$/spring-01/spring-01.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-02/spring-02.iml" filepath="$PROJECT_DIR$/spring-02/spring-02.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-03/spring-03.iml" filepath="$PROJECT_DIR$/spring-03/spring-03.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-04/spring-04.iml" filepath="$PROJECT_DIR$/spring-04/spring-04.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-05/spring-05.iml" filepath="$PROJECT_DIR$/spring-05/spring-05.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-06/spring-06.iml" filepath="$PROJECT_DIR$/spring-06/spring-06.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-07/spring-07.iml" filepath="$PROJECT_DIR$/spring-07/spring-07.iml" />
+      <module fileurl="file://$PROJECT_DIR$/springmvc-01/springmvc-01.iml" filepath="$PROJECT_DIR$/springmvc-01/springmvc-01.iml" />
+      <module fileurl="file://$PROJECT_DIR$/springmvc-02/springmvc-02.iml" filepath="$PROJECT_DIR$/springmvc-02/springmvc-02.iml" />
+      <module fileurl="file://$PROJECT_DIR$/springmvc-03/springmvc-03.iml" filepath="$PROJECT_DIR$/springmvc-03/springmvc-03.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ssm-wyy-music/ssm-wyy-music.iml" filepath="$PROJECT_DIR$/ssm-wyy-music/ssm-wyy-music.iml" />
+      <module fileurl="file://$PROJECT_DIR$/test_layUI/test_layUI.iml" filepath="$PROJECT_DIR$/test_layUI/test_layUI.iml" />
+      <module fileurl="file://$PROJECT_DIR$/video/video.iml" filepath="$PROJECT_DIR$/video/video.iml" />
+      <module fileurl="file://$PROJECT_DIR$/wyy-music-parent/wyy-music-controller/wyy-music-controller.iml" filepath="$PROJECT_DIR$/wyy-music-parent/wyy-music-controller/wyy-music-controller.iml" />
+      <module fileurl="file://$PROJECT_DIR$/wyy-music-parent/wyy-music-dao/wyy-music-dao.iml" filepath="$PROJECT_DIR$/wyy-music-parent/wyy-music-dao/wyy-music-dao.iml" />
+      <module fileurl="file://$PROJECT_DIR$/wyy-music-parent/wyy-music-parent.iml" filepath="$PROJECT_DIR$/wyy-music-parent/wyy-music-parent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/wyy-music-parent/wyy-music-service/wyy-music-service.iml" filepath="$PROJECT_DIR$/wyy-music-parent/wyy-music-service/wyy-music-service.iml" />
+    </modules>
+  </component>
+</project>

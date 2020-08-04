@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<script type="application/javascript" src="js/jquery-1.8.3.js"></script>
+
+<body>
+
+<form>
+    id:<input type="text" id="id" name="id"> <br><br>
+    name:<input type="text" id="name" name="name"> <br><br>
+    <input type="button" value="提交" onclick="testForm()">
+</form>
+
+</body>
+
+<script>
+
+    // function testForm() {
+    //
+    //     var user = $("form").serialize();
+    //
+    //     $.ajax({
+    //         type: "POST",
+    //         url: "user/testAjax",
+    //         data: user,
+    //         success: function(msg){
+    //             alert( "服务器返回值: " + msg );
+    //         }
+    //     });
+    // }
+
+    function testForm() {
+
+        var user = $("form").serialize();
+        $.post("user/testPost", user,
+            function (backdata, status, xmlHttpRequest) {
+                $("#id").val(backdata.id);
+                $("#name").val(backdata.name);
+            })
+    }
+    // function testForm() {
+    //     var user = $("form").serialize();
+    //     //alert(user);
+    //     $.get("user/testGet",user,
+    //         function (backdata,status,xmlHttpRequest) {
+    //             alert(xmlHttpRequest.status); //200
+    //             alert(xmlHttpRequest.readyState); //4
+    //             alert(xmlHttpRequest.responseText);  //对象
+    //         $("#id").val(backdata.id);
+    //         $("#name").val(backdata.name);
+    //     });
+    //}
+</script>
+
+</html>

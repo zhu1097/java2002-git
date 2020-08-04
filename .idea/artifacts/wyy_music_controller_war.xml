@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="wyy-music-controller:war">
+    <output-path>$PROJECT_DIR$/wyy-music-parent/wyy-music-controller/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>wyy-music-controller</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="wyy-music-controller.war">
+      <element id="artifact" artifact-name="wyy-music-controller:war exploded" />
+    </root>
+  </artifact>
+</component>

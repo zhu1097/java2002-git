@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="test_layUI:war">
+    <output-path>$PROJECT_DIR$/test_layUI/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>test_layUI</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="test_layUI.war">
+      <element id="artifact" artifact-name="test_layUI:war exploded" />
+    </root>
+  </artifact>
+</component>

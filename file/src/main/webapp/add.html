@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="layui/css/layui.css" rel="stylesheet">
+    <script src="layui/layui.js"></script>
+    <script src="js/jquery-1.8.3.js"></script>
+</head>
+<body>
+<h1  align="center"> 增加电子文档</h1><br/>
+<form class="layui-form" action="">
+    <div class="layui-form-item">
+        <label class="layui-form-label">文档名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="documentTitle" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">文档摘要</label>
+        <div class="layui-input-block">
+            <textarea name="documentContext" placeholder="请输入内容" class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">上传人</label>
+        <div class="layui-input-block">
+            <input type="text" name="documentAuthor" required  lay-verify="required" placeholder="请输入上传人名字" autocomplete="off" class="layui-input">
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">上传时间</label>
+            <div class="layui-input-inline">
+                <input type="date" name="documentDate" id="documentDate" lay-verify="date" placeholder="请输入时间" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+    </div>
+</form>
+</body>
+<script>
+    layui.use('form', function(){
+        var form = layui.form
+        var $=layui.jquery;
+
+        //监听提交
+        form.on('submit(formDemo)', function(data){
+            //layer.msg(JSON.stringify(data.field));
+            $.post("document/add",data.field,function () {
+                layer.msg("添加成功",{
+                    icon:1,
+                    time:1000,
+                }, function(){
+                    window.location.reload();
+                });
+            })
+            return false;
+        });
+    });
+</script>
+</html>

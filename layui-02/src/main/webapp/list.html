@@ -1,0 +1,344 @@
+<table class="layui-hide" id="test" lay-filter="test"></table>
+
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="addMusic">添加歌曲</button>
+    </div>
+</script>
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+
+<script>
+    layui.use('table', function(){
+        var table = layui.table;
+
+        table.render({
+            elem: '#test'
+            ,url:'music/findMusics'
+            ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+            ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+                title: '提示'
+                ,layEvent: 'LAYTABLE_TIPS'
+                ,icon: 'layui-icon-tips'
+            }]
+            ,title: '用户数据表'
+            ,cols: [[
+                {type: 'checkbox', fixed: 'left'}
+                ,{field:'music_id', title:'music_id', sort: true}
+                ,{field:'music_name', title:'歌曲名称'}
+                ,{field:'music_artist_name', title:'歌手'}
+                ,{field:'sheet_name', title:'歌单'}
+                //,{field:'create_time', title:'时间',templet:"<div>{{layui.util.toDateString(d.create_time, 'yyyy-MM-dd HH:mm:ss')}}</div> "}
+                ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+            ]]
+            ,page: true
+        });
+
+        //头工具栏事件
+        table.on('toolbar(test)', function(obj){
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch(obj.event){
+                case 'getCheckData':
+                    var data = checkStatus.data;
+                    //layer.alert(JSON.stringify(data));
+                    //声明参数传多个id
+                    var params = "";
+                    //js遍历
+                    for(var i in data){
+                        params+="&ids="+data[i].music_id
+                    }
+                    alert(params);
+
+                    // var param = "";
+                    // //jquery遍历
+                    // $.each( data, function(index, obj){
+                    //     param+="&ids="+obj.music_id;
+                    // });
+                    // alert(param+"---");
+
+                    $.ajax({
+                        url: "music/deleteByIds",
+                        type: "POST",
+                        data: params,
+                        success: function(){
+                            table.reload("test",{});
+                            //window.location.reload();
+                        }
+                    });
+
+                    break;
+                case 'getCheckLength':
+                    var data = checkStatus.data;
+                    layer.msg('选中了：'+ data.length + ' 个');
+                    break;
+                case 'isAll':
+                    layer.msg(checkStatus.isAll ? '全选': '未全选');
+                    break;
+                case 'addMusic':
+
+                    addMusic();
+
+                    break;
+
+                //自定义头工具栏右侧图标 - 提示
+                case 'LAYTABLE_TIPS':
+                    layer.alert('这是工具栏右侧自定义的一个图标按钮');
+                    break;
+            };
+        });
+
+        //监听行工具事件
+        table.on('tool(test)', function(obj){
+            var data = obj.data;
+            //console.log(obj)
+            if(obj.event === 'del'){
+                //alert(JSON.stringify(data));
+                layer.confirm('真的删除行么', function(index){
+                    obj.del();
+                    //从数据库中删除
+                    alert(data.music_id);
+
+                    $.ajax({
+                        url: "music/deleteById",
+                        data:"music_id="+data.music_id,
+                        success: function(){
+                            layer.close(index);
+                        }
+                    });
+
+                });
+            } else if(obj.event === 'edit'){
+
+                showMusic(data);
+
+                // layer.prompt({
+                //     formType: 2
+                //     ,value: data.email
+                // }, function(value, index){
+                //     obj.update({
+                //         email: value
+                //     });
+                //     layer.close(index);
+                // });
+            }
+        });
+    });
+</script>
+
+<script>
+
+    var sheets = null;
+
+    <!-- 页面加载时触发 -->
+    $(function () {
+
+        $.ajax({
+            type: "POST",
+            url: "music/selectSheet",
+            success: function(backData){
+                JSON.stringify(backData);
+                sheets  = backData;
+            }
+        });
+
+
+    })
+
+    function addMusic() {
+        layer.open({
+            type: 1,
+            content: $('#insertMusic').html(),
+            title: '添加歌曲',
+            area: ['600px', '600px'],
+            btn: ['提交', '取消'], //可以写多个按钮
+            success: function () {//弹出层打开后的回调函数,数据回显
+
+                for (var i = 0; i < sheets.length; i++) {
+                    $("#sheetsId").append('<option value="' + sheets[i].id + '">' + sheets[i].sheetName + '</option>');
+                }
+                layui.form.render();//后追加到页面的元素，layui不渲染，必须render
+            },
+            yes: function (index, layero) {
+                alert(111111111);
+                $.ajax({
+                    url: 'music/insertMusic',
+                    data: $("#music-add-form").serialize(),
+                    method: 'post',
+                    success: function () {
+                        window.location.reload();//重新加载
+                    }
+                })
+            }
+        })
+    }
+</script>
+
+
+<script>
+
+    var sheets = null;
+
+    <!-- 页面加载时触发 -->
+    $(function () {
+
+        $.ajax({
+            type: "POST",
+            url: "sheet/selectSheet",
+            success: function(backData){
+                JSON.stringify(backData);
+                sheets  = backData;
+            }
+        });
+
+
+    })
+
+
+    function showMusic(data) {
+        layer.open({
+            type: 1,
+            content: $('#updateMusic').html(),
+            title: '修改歌曲',
+            area: ['600px', '600px'],
+            btn: ['提交', '取消'], //可以写多个按钮
+            success: function () {//弹出层打开后的回调函数,数据回显
+                $('#musicId').val(data.music_id);
+                $('#musicName').val(data.music_name);
+                $('#musicArtistName').val(data.music_artist_name);
+
+                for (var i = 0; i < sheets.length; i++) {
+                    if (sheets[i].id == data.sheet_id) {
+                        $("#sheetId").append('<option selected value="' + sheets[i].id + '">' + sheets[i].sheetName + '</option>');
+                    }else{
+                        $("#sheetId").append('<option value="' + sheets[i].id + '">' + sheets[i].sheetName + '</option>');
+                    }
+                }
+                layui.form.render();//后追加到页面的元素，layui不渲染，必须render
+            },
+            yes: function (index, layero) {
+                $.ajax({
+                    url: 'music/updateMusic',
+                    data: $("#music-edit-form").serialize(),
+                    method: 'post',
+                    success: function () {
+                        window.location.reload();//重新加载
+                        //$("#main").load(url)
+                    }
+                })
+            }
+        })
+    }
+
+</script>
+
+<script type="text/html" id="updateMusic">
+    <form id="music-edit-form" style="width: 80%" class="layui-form" lay-filter="music-edit-form">
+        <input type="hidden" name="musicId" id="musicId">
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">歌曲名称</label>
+            <div class="layui-input-block">
+                <input id="musicName" type="text" name="musicName" required lay-verify="required"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">歌手名称</label>
+            <div class="layui-input-block">
+                <input id="musicArtistName" type="text" name="musicArtistName" required lay-verify="required"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">歌单名称</label>
+            <div class="layui-input-inline">
+                <select name="sheetId" id="sheetId">
+
+                </select>
+            </div>
+        </div>
+    </form>
+</script>
+<!--`music_id` varchar(255) NOT NULL,-->
+<!--`music_name` varchar(255) NOT NULL,-->
+<!--`music_album_name` varchar(255) NOT NULL,-->
+<!--`music_album_picUrl` varchar(255) NOT NULL,-->
+<!--`music_mp3Url` varchar(255) NOT NULL,-->
+<!--`music_artist_name` varchar(255) NOT NULL,-->
+<!--`sheet_id` int(11) DEFAULT NULL,-->
+<!--`create_time` date DEFAULT NULL,-->
+<script type="text/html" id="insertMusic">
+    <form id="music-add-form" style="width: 80%" class="layui-form" lay-filter="music-edit-form">
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">歌曲ID</label>
+            <div class="layui-input-block">
+                <input id="musicsID" type="text" name="musicId" required lay-verify="required"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">歌曲名称</label>
+            <div class="layui-input-block">
+                <input id="musicsName" type="text" name="musicName" required lay-verify="required"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">专辑名字</label>
+            <div class="layui-input-block">
+                <input id="musicsAlbumName" type="text" name="musicAlbumName" required lay-verify="required"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">专辑图片</label>
+            <div class="layui-input-block">
+                <input id="musicsAlbumPicUrl" type="text" name="musicAlbumPicurl" required lay-verify="required"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">Mp3Url</label>
+            <div class="layui-input-block">
+                <input id="musicsMp3Url" type="text" name="musicMp3url" required lay-verify="required"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">歌手名称</label>
+            <div class="layui-input-block">
+                <input id="musicsArtistName" type="text" name="musicArtistName" required lay-verify="required"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">歌单名称</label>
+            <div class="layui-input-inline">
+                <select name="sheetId" id="sheetsId">
+
+                </select>
+            </div>
+        </div>
+    </form>
+</script>

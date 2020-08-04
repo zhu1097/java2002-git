@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop" xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd"> <!-- bean definitions here -->
+
+            <bean name="userDao" class="com.qf.dao.impl.UserDaoImpl"></bean>
+            <bean name="myAdvice" class="com.qf.advice.MyAdvice"></bean>
+    <!--&lt;!&ndash; 配置AOP &ndash;&gt;-->
+    <!--<aop:config>-->
+        <!--&lt;!&ndash; 配置切点 &ndash;&gt;-->
+        <!--<aop:pointcut id="pc" expression="execution(public void com.qf.dao.impl.UserDaoImpl.add())"/>-->
+        <!--&lt;!&ndash; 配置切面 &ndash;&gt;-->
+        <!--<aop:aspect ref="myAdvice">-->
+            <!--<aop:before method="before" pointcut-ref="pc"></aop:before>-->
+            <!--<aop:after method="afterAdvice" pointcut-ref="pc"></aop:after>-->
+        <!--</aop:aspect>-->
+
+    <!--</aop:config>-->
+    <aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+</beans>

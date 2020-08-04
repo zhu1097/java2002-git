@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:templet="http://www.w3.org/1999/xhtml" xmlns: xmlns:>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="layui/css/layui.css" rel="stylesheet">
+    <script src="layui/layui.js"></script>
+    <script src="js/jquery-1.8.3.js"></script>
+</head>
+<body>
+<div class="demoTable">
+    文档分类：
+    <div class="layui-inline">
+        <input class="layui-input" name="id" id="demoReload" autocomplete="off">
+    </div>
+    <button id="searchBtn" class="layui-btn" data-type="reload">搜索</button>
+    <button id="addBtn" class="layui-btn" data-type="reload">新增</button>
+</div>
+<table class="layui-hide" id="test" lay-filter="test"></table>
+</body>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+
+<script>
+    layui.use(['table','layer','laydate','laypage'], function(){
+        var table = layui.table
+            ,laydate=layui.laydate
+        layer=layui.layer
+        table.render({
+            elem: '#test'
+            ,url:'document/findAll'
+            ,title: '用户数据表'
+            ,cols: [[
+                {field:'id', title:'文档编号', sort: true}
+                ,{field:'document_title', title:'文档名称'}
+                ,{field:'document_context', title:'文档摘要'}
+                ,{field:'document_author', title:'上传人'}
+                ,{field:'document_date', title:'时间',templet:"<div>{{layui.util.toDateString(d.create_time, 'yyyy-MM-dd HH:mm:ss')}}</div> "}
+                ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+            ]]
+            ,id:"listData"
+            ,page: true
+        });
+
+        //监听行工具事件
+        table.on('tool(test)', function(obj){
+            var data = obj.data;
+            //console.log(obj)
+            if(obj.event === 'del'){
+                obj.del();
+                layer.confirm('真的删除行么', function(index){
+                    $.ajax({
+                        type:"get",
+                        url:"document/deleteById",
+                        data:"id="+data.id,
+                        success: function(){
+                            layer.close(index);
+                        }
+                    });
+
+                });
+            } else if(obj.event === 'edit'){
+                showMusic(data);
+                alert(data);
+            }
+        });
+        var $ = layui.$;
+        var active = {
+            reload: function(){
+                var demoReload = $('#demoReload');
+
+                //执行重载
+                table.reload('listData', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    ,where: {
+                        typeName:demoReload.val()
+                    }
+                }, 'data');
+            }
+        };
+
+        $('#searchBtn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+        $("#addBtn").on('click',function () {
+            layer.open({
+                type: 2,
+                area:['900px','500px'],
+                content: 'add.html'
+            });
+        })
+    });
+</script>
+<script>
+
+    var types = null;
+
+    <!-- 页面加载时触发 -->
+    $(function () {
+
+        $.ajax({
+            type: "POST",
+            url: "type/selectType",
+            success: function(backData){
+                JSON.stringify(backData);
+                types  = backData;
+            }
+        });
+
+
+    })
+
+    function showMusic(data) {
+        layer.open({
+            type: 1,
+            content: $('#updateDocument').html(),
+            title: '修改文档',
+            area: ['600px', '600px'],
+            btn: ['提交', '取消'], //可以写多个按钮
+            success: function () {//弹出层打开后的回调函数,数据回显
+                $('#id').val(data.id);
+                $('#documentTitle').val(data.document_title);
+                $('#documentContext').val(data.document_context);
+                $('#documentAuthor').val(data.document_author);
+                $('#documentDate').val(layui.util.toDateString(data.document_date, 'yyyy-MM-dd HH:mm:ss'));
+
+                for (var i = 0; i < types.length; i++) {
+                    if (types[i].id == data.type_id) {
+                        $("#typeId").append('<option selected value="' + types[i].id + '">' + types[i].typeName + '</option>');
+                    }else{
+                        $("#typeId").append('<option value="' + types[i].id + '">' + types[i].typeName + '</option>');
+                    }
+                }
+                layui.form.render();//后追加到页面的元素，layui不渲染，必须render
+            },
+            yes: function (index, layero) {
+                $.ajax({
+                    url: 'document/updateDocument',
+                    data: $("#document-edit-form").serialize(),
+                    method: 'post',
+                    success: function () {
+                        window.location.reload();//重新加载
+                        //$("#main").load(url)
+                    }
+                })
+            }
+        })
+    }
+
+</script>
+
+<script type="text/html" id="updateDocument">
+    <form id="document-edit-form" style="width: 80%" class="layui-form" lay-filter="music-edit-form">
+        <input type="hidden" name="Id" id="id">
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">文档名称</label>
+            <div class="layui-input-block">
+                <input id="documentTitle" type="text" name="documentTitle" required lay-verify="required"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">文档摘要</label>
+            <div class="layui-input-block">
+                <input id="documentContext" type="text" name="documentContext" required lay-verify="required"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">上传人</label>
+            <div class="layui-input-block">
+                <input id="documentAuthor" type="text" name="documentAuthor" required lay-verify="required"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+           <!--// templet:"<div>{{layui.util.toDateString(d.create_time, 'yyyy-MM-dd HH:mm:ss')}}</div> "-->
+            <label class="layui-form-label" >上传时间</label>
+            <div class="layui-input-block">
+                <input id="documentDate" type="text" name="documentDate" required lay-verify="required"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">类别</label>
+            <div class="layui-input-inline">
+                <select name="typeId" id="typeId">
+
+                </select>
+            </div>
+        </div>
+    </form>
+</script>
+</html>

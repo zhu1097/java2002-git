@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper  namespace="com.qf.dao.SpeakerMapper">
+    <select id="selectSpeakerName" resultType="HashMap">
+       select * from speaker
+    </select>
+    <select id="findAll" resultType="HashMap">
+        select * from speaker
+    </select>
+    <delete id="deleteById" parameterType="Integer">
+         delete from speaker where id = #{id}
+    </delete>
+    <update id="updateSpeaker" parameterType="com.qf.pojo.Speaker">
+        update speaker
+        set
+        <if test="speakerName != null and speakerName != ''">
+            speaker_name = #{speakerName},
+        </if>
+        <if test="speakerJob != null and speakerJob != ''">
+            speaker_job = #{speakerJob},
+        </if>
+        <if test="speakerDesc != null and speakerDesc != ''">
+            speaker_desc = #{speakerDesc},
+        </if>
+        id=#{id}
+        where
+        id = #{id}
+    </update>
+    <insert id="insertSpeaker" parameterType="com.qf.pojo.Speaker">
+         INSERT INTO speaker(
+        speaker_name,
+        speaker_desc,
+        speaker_job)
+        VALUES
+        (#{speakerName},
+        #{speakerDesc},
+        #{speakerJob}
+        )
+
+    </insert>
+</mapper>

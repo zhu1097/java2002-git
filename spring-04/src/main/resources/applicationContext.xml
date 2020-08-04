@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"> <!-- bean definitions here -->
+   <context:property-placeholder location="jdbc.properties"></context:property-placeholder>
+    <bean name="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+       <property name="username" value="${jdbc.username}"></property>
+       <property name="password" value="${jdbc.password}"></property>
+       <property name="url" value="${jdbc.url}"></property>
+       <property name="driverClassName" value="${jdbc.driverClassName}"></property>
+   </bean>
+    <bean name="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+       <property name="dataSource" ref="dataSource"></property>
+   </bean>
+    <bean name="userDao" class="com.qf.dao.impl.UserDaoImpl">
+        <property name="jdbcTemplate" ref="jdbcTemplate"></property>
+    </bean>
+    <bean name="userservice" class="com.qf.service.impl.UserServiceImpl">
+        <property name="userDao" ref="userDao"></property>
+    </bean>
+
+    <bean name="usercontroller" class="com.qf.controller.UserController">
+        <property name="userservice" ref="userservice"></property>
+    </bean>
+
+    <bean name="user" class="com.qf.pojo.User"></bean>
+</beans>

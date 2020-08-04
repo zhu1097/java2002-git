@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" addBOMForNewFiles="with NO BOM">
+    <file url="file://$PROJECT_DIR$/file" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/layui-01" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/layui-02" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/springmvc-01" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/springmvc-02" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/springmvc-03" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ssm-wyy-music" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/test_layUI" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/video" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/wyy-music-parent/wyy-music-controller" charset="UTF-8" />
+  </component>
+</project>

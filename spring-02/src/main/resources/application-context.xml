@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+  <!--   <bean name="car" class="com.qf.pojo.Car">
+          <constructor-arg name="cname" value="保时捷"></constructor-arg>
+     </bean>
+     <bean name="user" class="com.qf.pojo.User">
+     <constructor-arg name="uid" value="1001" index="0"></constructor-arg>
+     <constructor-arg name="username" value="张三" index="1"></constructor-arg>
+          <constructor-arg name="car" ref="car"></constructor-arg>-->
+<!--</bean>-->
+     <bean name="car" class="com.qf.pojo.Car">
+         <property name="cname" value="保时捷"></property>
+     </bean>
+     <bean name="user" class="com.qf.pojo.User">
+          <property name="uid" value="1"></property>
+          <property name="username" value="jack"></property>
+          <property name="car" ref="car"></property>
+     </bean>
+   <bean name="collectiondemo" class="com.qf.pojo.CollectionDemo">
+        <property name="arr">
+             <array>
+                  <value>1</value>
+                  <value>2</value>
+                  <value>3</value>
+             </array>
+        </property>
+        <property name="list">
+             <list>
+                  <value>jack</value>
+                  <value>rose</value>
+                  <ref bean="user"></ref>
+             </list>
+        </property>
+        <property name="set">
+             <set>
+                  <value>张三</value>
+                  <value>李四</value>
+                  <ref bean="car"></ref>
+             </set>
+        </property>
+        <property name="map">
+             <map>
+                  <entry key-ref="user" value-ref="car"></entry>
+             </map>
+        </property>
+        <property name="prop">
+             <props>
+                  <prop key="username">root</prop>
+                  <prop key="password">123456</prop>
+             </props>
+        </property>
+   </bean>
+</beans>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <file url="file://$PROJECT_DIR$/springmvc-01/overlays" />
+    <file type="web" url="file://$PROJECT_DIR$/file" />
+    <file type="web" url="file://$PROJECT_DIR$/layui-01" />
+    <file type="web" url="file://$PROJECT_DIR$/layui-02" />
+    <file type="web" url="file://$PROJECT_DIR$/springmvc-01" />
+    <file type="web" url="file://$PROJECT_DIR$/springmvc-02" />
+    <file type="web" url="file://$PROJECT_DIR$/springmvc-03" />
+    <file type="web" url="file://$PROJECT_DIR$/ssm-wyy-music" />
+    <file type="web" url="file://$PROJECT_DIR$/test_layUI" />
+    <file type="web" url="file://$PROJECT_DIR$/video" />
+    <file type="web" url="file://$PROJECT_DIR$/wyy-music-parent/wyy-music-controller" />
+  </component>
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/mybatis_01/pom.xml" />
+        <option value="$PROJECT_DIR$/spring-01/pom.xml" />
+        <option value="$PROJECT_DIR$/spring-02/pom.xml" />
+        <option value="$PROJECT_DIR$/spring-03/pom.xml" />
+        <option value="$PROJECT_DIR$/spring-04/pom.xml" />
+        <option value="$PROJECT_DIR$/spring-05/pom.xml" />
+        <option value="$PROJECT_DIR$/spring-06/pom.xml" />
+        <option value="$PROJECT_DIR$/spring-07/pom.xml" />
+        <option value="$PROJECT_DIR$/springmvc-01/pom.xml" />
+        <option value="$PROJECT_DIR$/springmvc-02/pom.xml" />
+        <option value="$PROJECT_DIR$/springmvc-03/pom.xml" />
+        <option value="$PROJECT_DIR$/ssm-wyy-music/pom.xml" />
+        <option value="$PROJECT_DIR$/wyy-qf-music/pom.xml" />
+        <option value="$PROJECT_DIR$/wyy-music-parent/pom.xml" />
+        <option value="$PROJECT_DIR$/mylog-01/pom.xml" />
+        <option value="$PROJECT_DIR$/MyLog-02/pom.xml" />
+        <option value="$PROJECT_DIR$/mylog-02/pom.xml" />
+        <option value="$PROJECT_DIR$/my-quartz/pom.xml" />
+        <option value="$PROJECT_DIR$/my-quartz-02/pom.xml" />
+        <option value="$PROJECT_DIR$/my-quartz-01/pom.xml" />
+        <option value="$PROJECT_DIR$/myquartz/pom.xml" />
+        <option value="$PROJECT_DIR$/layui-01/pom.xml" />
+        <option value="$PROJECT_DIR$/layui-02/pom.xml" />
+        <option value="$PROJECT_DIR$/test_layUI/pom.xml" />
+        <option value="$PROJECT_DIR$/mybatis-02/pom.xml" />
+        <option value="$PROJECT_DIR$/file/pom.xml" />
+        <option value="$PROJECT_DIR$/video/pom.xml" />
+        <option value="$PROJECT_DIR$/git/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="false" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
+</project>

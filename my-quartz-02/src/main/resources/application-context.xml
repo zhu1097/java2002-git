@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+  <bean name="jobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+       <property name="name" value="job1"></property>
+       <property name="group" value="group1"></property>
+       <property name="jobClass" value="com.qf.job.MyJob"></property>
+  </bean>
+     <bean name="trigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+          <property name="name" value="trigger1"></property>
+          <property name="group" value="trigger-group"></property>
+          <property name="jobDetail" ref="jobDetail"></property>
+          <property name="cronExpression" value="* * * * * ?"></property>
+     </bean>
+     <bean name="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+          <property name="triggers">
+               <list>
+                    <ref bean="trigger"></ref>
+               </list>
+          </property>
+     </bean>
+
+</beans>

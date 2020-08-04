@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <script src="layui/layui.js"></script>
+</head>
+<body>
+<form class="layui-form layui-form-pane" action="" method="post">
+    <!-- layui-form-item 一个输入项-->
+    <div class="layui-form-item">
+        <label class="layui-form-label">生日</label>
+        <!-- layui-input-block 输入框会占满除文字外的整行 -->
+        <div class="layui-input-block">
+            <input readonly id="birth" type="text" name="birth" placeholder="请选择生日日期" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+</form>
+</body>
+<!--<script>-->
+    <!--// 导入 layer模块-->
+    <!--layui.use(["layer"],function(){-->
+        <!--var layer = layui.layer;-->
+        <!--layer.msg("hello world!!");-->
+        <!--layer.msg("确定吗？",{btn:["确定！","放弃！"],-->
+            <!--yes:function(i){layer.close(i);layer.msg("yes!!!")},-->
+            <!--btn2:function(i){layer.close(i);layer.msg("no!!!")}}-->
+        <!--);-->
+    <!--});-->
+<!--</script>-->
+<!--<script>-->
+    <!--// 导入 layer模块-->
+    <!--layui.use(["layer"],function(){-->
+        <!--var layer = layui.layer;-->
+        <!--//0-6 7种图标  0:warning  1:success  2:error  3:question  4:lock  5:哭脸  6：笑脸-->
+        <!--layer.alert("alert弹框",-->
+            <!--{title:'alert',icon:6 },-->
+            <!--function(){//点击“确定”按钮时的回调-->
+                <!--layer.msg("好滴");-->
+            <!--}-->
+        <!--);-->
+    <!--});-->
+<!--</script>-->
+<script>
+    layui.use(["laydate","form"],function(){
+        var laydate = layui.laydate;
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#birth', //指定元素
+            format:'yyyy/MM/dd',
+            value:'2012/12/12' //默认值
+            // value:new Date() //默认值
+        });
+    });
+</script>
+</html>
